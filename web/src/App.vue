@@ -1,13 +1,16 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import Layout from '@/layouts/AppLayout.vue'
-import Home from './views/Home.vue';
+<script setup lang="ts" name="app">
+import Home from './views/Home.vue'
+import router from './router';
+
+const goToHome= () => {
+  router.push('/home');
+};
+
+
 </script>
 
 <template>
-  <!-- <Layout></Layout> -->
-    <router-link to="/home">home</router-link>
-  <RouterView/>
+  <router-view></router-view>
 </template>
 
 <style scoped></style>
