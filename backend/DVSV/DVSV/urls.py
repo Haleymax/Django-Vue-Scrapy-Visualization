@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from DVSV.server import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('add_user/', views.add_user),
 ]
