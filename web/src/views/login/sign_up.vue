@@ -36,6 +36,12 @@ const siginForm = reactive({
     password: "",
 });
 
+const sigupForm = reactive({
+    email:"",
+    password:"",
+    confirmPassword:"",
+    code:"",
+})
 
 
 // 定义验证规则
