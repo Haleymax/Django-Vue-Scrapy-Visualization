@@ -5,19 +5,25 @@
                 <h2>用户注册</h2>
             </div>
             <div class="form">
-                <!-- 修正标签名为 el-form -->
-                <el-form :model="siginForm" label-width="100px" style="transform: translate(-30px) ">
+                <el-form :model="siginForm" label-width="100px" style="transform: translate(-30px)">
                     <el-form-item label="邮箱" prop="email">
-                        <el-input v-model="siginForm.email" placeholder="请输入邮箱" clearable></el-input>
+                        <el-input class="input-box" v-model="siginForm.email" placeholder="请输入邮箱" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="siginForm.password" placeholder="请输入密码" show-password
-                            clearable></el-input>
+                        <el-input class="input-box" type="password" v-model="siginForm.password" placeholder="请输入密码"
+                            show-password clearable></el-input>
                     </el-form-item>
-                    <el-button class="btn" type="primary" @click="login">登陆</el-button>
+                    <el-form-item label="确认密码" prop="confirmPassword">
+                        <el-input class="input-box" type="password" v-model="siginForm.confirmPassword"
+                            placeholder="请再次输入密码" show-password clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="验证码" prop="code">
+                        <el-input style="width: 100px;" v-model="siginForm.code" placeholder="验证码" clearable></el-input>
+                        <div>验证码图片</div>
+                    </el-form-item>
+                    <el-button class="btn" type="primary" @click="login">注册</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="danger" style="margin-right: 140px">忘记密码？</el-link>
-                        <el-link type="warning">没有账号？去注册</el-link>
+                        <el-link type="warning" style="margin-right: 140px">已有账号？去登录</el-link>
                     </div>
                 </el-form>
             </div>
@@ -34,25 +40,30 @@ import Login from './Login.vue';
 const siginForm = reactive({
     email: "",
     password: "",
+    confirmPassword: "",
+    code: "",
 });
-
-
 
 // 定义验证规则
 const rules = {
     email: [
-        // 添加验证规则，例如：必填、邮箱格式等
         { required: true, message: '请输入邮箱', trigger: 'blur' },
         { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
     ],
     password: [
         { required: true, message: '请输入密码', trigger: 'blur' }
+    ],
+    confirmPassword: [
+        { required: true, message: '请确认密码', trigger: 'blur' }
+    ],
+    code: [
+        { required: true, message: '请输入验证码', trigger: 'blur' }
     ]
 };
 
-//发送登录请求
+//发送注册请求
 const login = async () => {
-    console.log("发送登录请求")
+    console.log("发送注册请求");
 }
 </script>
 
@@ -62,30 +73,30 @@ const login = async () => {
     top: 20%;
     right: 400px;
     width: 450px;
-    height: 600px;
+    height: 800px;
 }
 
 .label {
     position: relative;
     width: 100%;
-    height: 60px; // 设置高度以容纳<h2>标签
-    line-height: 60px; // 使用line-height来垂直居中<h2>标签
+    height: 60px;
+    line-height: 60px;
     text-align: center;
-    margin-bottom: 20px; // 添加下边距以与.form分隔
+    margin-bottom: 20px;
 }
 
 .form {
-    width: 100%; // 确保.form占据.loginPart的全部宽度
-    // 移除不必要的transform属性
+    width: 100%;
 }
 
 .loginPart {
     width: 450px;
-    height: 300px;
+    height: 500px;
     background: rgba(32, 84, 182, 0.1);
     box-sizing: border-box;
     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
+    padding: 20px; // 添加内边距
 }
 
 .btn {
@@ -95,8 +106,12 @@ const login = async () => {
     font-size: 15px;
 }
 
+.input-box {
+    width: 100%; // 使输入框占满整个可用宽度
+}
+
 h2 {
-    margin: 50 0 50 px;
+    margin: 50px 0;
     padding: 0;
     color: #000;
     text-align: center;
