@@ -107,7 +107,7 @@ const close = () => {
 }
 
 h2 {
-    margin: 0; 
+    margin: 0; /* 去掉默认的 margin */
     padding: 0;
     color: #000;
     text-align: center;

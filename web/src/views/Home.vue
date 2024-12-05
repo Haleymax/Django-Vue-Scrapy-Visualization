@@ -11,17 +11,9 @@
                     </el-col>
                     <el-col :span="4">
                         <el-dropdown @command="handleCommand">
-                            <span class="el-dropdown-link">
-                                个人信息<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                            </span>
+                            <Avatar/>
                             <template #dropdown>
-                                <el-dropdown-menu>
-                                    <el-dropdown-item command="a">Action 1</el-dropdown-item>
-                                    <el-dropdown-item command="b">Action 2</el-dropdown-item>
-                                    <el-dropdown-item command="c">Action 3</el-dropdown-item>
-                                    <el-dropdown-item command="d" disabled>Action 4</el-dropdown-item>
-                                    <el-dropdown-item command="e" divided>Action 5</el-dropdown-item>
-                                </el-dropdown-menu>
+                                <DropdownMenu></DropdownMenu>
                             </template>
                         </el-dropdown>
                     </el-col>
@@ -31,16 +23,38 @@
                 <el-aside width="200px">
                     <Menu></Menu>
                 </el-aside>
-                <el-main>Main</el-main>
+                <el-main>
+                    <div>
+                        <RouterView></RouterView>
+                    </div>
+                </el-main>
             </el-container>
         </el-container>
+    </div>
+
+    <div v-if="showLoginForm.isLoginFormVisible" class="modal-overlay">
+        <div>
+            <SignIn @close="showLoginForm.hideLoginForm" />
+        </div>
+    </div>
+
+    <div v-if="showLoginForm.isSignUpFormVisible" class="modal-overlay">
+        <div>
+            <SignUp @close="showLoginForm.hideLoginForm" />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts" name='Home'>
 import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
 import Menu from '@/components/Menu.vue'
+import DropdownMenu from '@/components/DropdownMenu.vue'
+import Avatar from '@/components/Avatar.vue'
+import {useLoginForm} from '@/store/home'
+import SignIn from '@/views/login/sign_in.vue'
+import SignUp from '@/views/login/sign_up.vue'
+
+const showLoginForm = useLoginForm()
 
 const handleCommand = (command: string | number | object) => {
     ElMessage(`click on item ${command}`)
@@ -110,5 +124,26 @@ const handleCommand = (command: string | number | object) => {
 
 .el-dropdown-link {
     color: white;
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px); /* 背景模糊效果 */
+    z-index: 1000; /* 确保在最上层 */
 }
 </style>

@@ -1,8 +1,14 @@
 <template>
     <div class="signin-div">
         <div class="loginPart">
-            <div class="label">
-                <h2>用户注册</h2>
+            <div class="header">
+
+                <div class="label">
+                    <h2>用户注册</h2>
+                </div>
+                <div class="close-button">
+                    <el-button key="x" type="danger" text @click="close">x</el-button>
+                </div>
             </div>
             <div class="form">
                 <el-form :model="siginForm" label-width="100px" style="transform: translate(-30px)">
@@ -23,7 +29,7 @@
                     </el-form-item>
                     <el-button class="btn" type="primary" @click="login">注册</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="warning" style="margin-right: 140px">已有账号？去登录</el-link>
+                        <el-link type="warning" style="margin-right: 140px" @click = showLoginForm.showLoginForm>已有账号？去登录</el-link>
                     </div>
                 </el-form>
             </div>
@@ -35,8 +41,12 @@
 import { reactive } from 'vue';
 import { ElForm } from 'element-plus'; // 导入ElForm类型（如果需要类型检查）
 import Login from './Login.vue';
+import { useLoginForm } from '@/store/home';
 
-// 使用一个响应式对象来存储表单数据
+const emit = defineEmits(['close']); 
+const showLoginForm = useLoginForm();
+
+
 const siginForm = reactive({
     email: "",
     password: "",
@@ -44,7 +54,6 @@ const siginForm = reactive({
     code: "",
 });
 
-// 定义验证规则
 const rules = {
     email: [
         { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -65,6 +74,10 @@ const rules = {
 const login = async () => {
     console.log("发送注册请求");
 }
+
+const close = () => {
+    emit('close'); 
+};
 </script>
 
 <style lang="scss" scoped>
@@ -73,20 +86,30 @@ const login = async () => {
     top: 20%;
     right: 400px;
     width: 450px;
-    height: 800px;
+    height: 500px;
 }
 
 .label {
-    position: relative;
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
+    flex: 1;
     text-align: center;
-    margin-bottom: 20px;
 }
+
 
 .form {
     width: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.close-button {
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 .loginPart {
@@ -111,7 +134,6 @@ const login = async () => {
 }
 
 h2 {
-    margin: 50px 0;
     padding: 0;
     color: #000;
     text-align: center;
