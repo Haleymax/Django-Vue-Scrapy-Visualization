@@ -1,23 +1,27 @@
 <template>
     <div class="signin-div">
         <div class="loginPart">
-            <div class="label">
-                <h2>用户登录</h2>
+            <div class="header">
+                
+                <div class="label">
+                    <h2>用户登录</h2>
+                </div>
+                <div class="close-button">
+                    <el-button key="x" type="danger" text @click="close">x</el-button>
+                </div>
             </div>
             <div class="form">
-                <!-- 修正标签名为 el-form -->
-                <el-form :model="siginForm" label-width="100px" style="transform: translate(-30px) ">
+                <el-form :model="siginForm" :rules="rules" label-width="100px" style="transform: translate(-30px)">
                     <el-form-item label="邮箱" prop="email">
                         <el-input v-model="siginForm.email" placeholder="请输入邮箱" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="siginForm.password" placeholder="请输入密码" show-password
-                            clearable></el-input>
+                        <el-input type="password" v-model="siginForm.password" placeholder="请输入密码" show-password clearable></el-input>
                     </el-form-item>
                     <el-button class="btn" type="primary" @click="login">登陆</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="danger" style="margin-right: 140px">忘记密码？</el-link>
-                        <el-link type="warning">没有账号？去注册</el-link>
+                        <el-link type="danger" style="margin-right: 140px" >忘记密码？</el-link>
+                        <el-link type="warning" @click="showLoginForm.showSignUpForm">没有账号？去注册</el-link>
                     </div>
                 </el-form>
             </div>
@@ -26,34 +30,32 @@
 </template>
 
 <script setup lang="ts" name="SignIn">
-import { reactive } from 'vue';
-import { ElForm } from 'element-plus'; // 导入ElForm类型（如果需要类型检查）
-import Login from './Login.vue';
+import { reactive, defineEmits } from 'vue';
+import { useLoginForm } from '@/store/home';
 
-// 使用一个响应式对象来存储表单数据
+const showLoginForm = useLoginForm();
+const emit = defineEmits(['close']); 
+
 const siginForm = reactive({
     email: "",
     password: "",
 });
 
-
-
-// 定义验证规则
 const rules = {
     email: [
-        // 添加验证规则，例如：必填、邮箱格式等
-        { required: true, message: '请输入邮箱', trigger: 'blur' },
-        { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
+     
     ],
     password: [
-        { required: true, message: '请输入密码', trigger: 'blur' }
     ]
 };
 
-//发送登录请求
 const login = async () => {
-    console.log("发送登录请求")
-}
+    console.log("发送登录请求");
+};
+
+const close = () => {
+    emit('close'); 
+};
 </script>
 
 <style lang="scss" scoped>
@@ -65,20 +67,6 @@ const login = async () => {
     height: 600px;
 }
 
-.label {
-    position: relative;
-    width: 100%;
-    height: 60px; // 设置高度以容纳<h2>标签
-    line-height: 60px; // 使用line-height来垂直居中<h2>标签
-    text-align: center;
-    margin-bottom: 20px; // 添加下边距以与.form分隔
-}
-
-.form {
-    width: 100%; // 确保.form占据.loginPart的全部宽度
-    // 移除不必要的transform属性
-}
-
 .loginPart {
     width: 450px;
     height: 300px;
@@ -86,6 +74,29 @@ const login = async () => {
     box-sizing: border-box;
     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
+    padding: 20px; 
+}
+
+.header {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.close-button {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.label {
+    flex: 1; 
+    text-align: center;
+}
+
+.form {
+    width: 100%;
 }
 
 .btn {
@@ -96,7 +107,7 @@ const login = async () => {
 }
 
 h2 {
-    margin: 50 0 50 px;
+    margin: 0; 
     padding: 0;
     color: #000;
     text-align: center;
