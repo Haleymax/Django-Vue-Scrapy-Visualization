@@ -32,9 +32,15 @@
         </el-container>
     </div>
 
-    <div v-if="showLoginForm.isShow" class="modal-overlay">
+    <div v-if="showLoginForm.isLoginFormVisible" class="modal-overlay">
         <div>
-            <SignIn @close="showLoginForm.isShow = false" />
+            <SignIn @close="showLoginForm.hideLoginForm" />
+        </div>
+    </div>
+
+    <div v-if="showLoginForm.isSignUpFormVisible" class="modal-overlay">
+        <div>
+            <SignUp @close="showLoginForm.hideLoginForm" />
         </div>
     </div>
 </template>
@@ -46,6 +52,7 @@ import DropdownMenu from '@/components/DropdownMenu.vue'
 import Avatar from '@/components/Avatar.vue'
 import {useLoginForm} from '@/store/home'
 import SignIn from '@/views/login/sign_in.vue'
+import SignUp from '@/views/login/sign_up.vue'
 
 const showLoginForm = useLoginForm()
 

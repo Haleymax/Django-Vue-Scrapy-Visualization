@@ -11,7 +11,7 @@
         </div>
         <div v-else>
             <el-dropdown-menu>
-                <el-dropdown-item @click="showLoginForm.set_true()">注册/登录</el-dropdown-item>
+                <el-dropdown-item @click="showLoginForm.showLoginForm">注册/登录</el-dropdown-item>
             </el-dropdown-menu>
         </div>
     </el-dropdown>
