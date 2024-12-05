@@ -1,18 +1,38 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useLoginForm = defineStore('showLoginForm', () => {
+export const useLoginForm = defineStore('loginForm', () => {
     
-    //设置变量控制是否显示登录框
-    let isShow = ref(false)
+    // 控制是否显示登录框
+    const isLoginFormVisible = ref(false);
 
-    const set_false = () => {
-        isShow.value = false;
-    }
+    // 控制是否显示注册框
+    const isSignUpFormVisible = ref(false);
 
-    const set_true = () => {
-        isShow.value = true;
-    }
-    
-    return {isShow, set_false, set_true};
-})
+    // 显示登录框
+    const showLoginForm = () => {
+        isLoginFormVisible.value = true;
+        isSignUpFormVisible.value = false;
+    };
+
+    // 隐藏登录框
+    const hideLoginForm = () => {
+        isLoginFormVisible.value = false;
+        isSignUpFormVisible.value = false;
+    };
+
+    // 显示注册框
+    const showSignUpForm = () => {
+        isSignUpFormVisible.value = true;
+        isLoginFormVisible.value = false;
+    };
+
+
+    return {
+        isLoginFormVisible,
+        isSignUpFormVisible,
+        showLoginForm,
+        hideLoginForm,
+        showSignUpForm,
+    };
+});

@@ -10,7 +10,6 @@ declare module 'vue' {
     Avatar: typeof import('./src/components/Avatar.vue')['default']
     DropdownMenu: typeof import('./src/components/DropdownMenu.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
-    ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElContainer: typeof import('element-plus/es')['ElContainer']
