@@ -29,7 +29,7 @@
                     </el-form-item>
                     <el-button class="btn" type="primary" @click="login">注册</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="warning" style="margin-right: 140px">已有账号？去登录</el-link>
+                        <el-link type="warning" style="margin-right: 140px" @click = showLoginForm.showLoginForm>已有账号？去登录</el-link>
                     </div>
                 </el-form>
             </div>
@@ -41,8 +41,10 @@
 import { reactive } from 'vue';
 import { ElForm } from 'element-plus'; // 导入ElForm类型（如果需要类型检查）
 import Login from './Login.vue';
+import { useLoginForm } from '@/store/home';
 
 const emit = defineEmits(['close']); 
+const showLoginForm = useLoginForm();
 
 
 const siginForm = reactive({
@@ -72,6 +74,10 @@ const rules = {
 const login = async () => {
     console.log("发送注册请求");
 }
+
+const close = () => {
+    emit('close'); 
+};
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +86,7 @@ const login = async () => {
     top: 20%;
     right: 400px;
     width: 450px;
-    height: 800px;
+    height: 500px;
 }
 
 .label {
@@ -128,7 +134,6 @@ const login = async () => {
 }
 
 h2 {
-    margin: 50px 0;
     padding: 0;
     color: #000;
     text-align: center;
