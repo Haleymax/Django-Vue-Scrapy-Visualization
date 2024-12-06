@@ -3,3 +3,5 @@
 backend/DVSV/DVSV/__pycache__
 backend/.idea
 **/.idea/
+**/mysql/
+**/rabbitmq/
