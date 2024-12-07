@@ -6,4 +6,4 @@ backend/.idea
 **/mysql/
 **/rabbitmq/
 /test
-/.idea
+**/.idea

@@ -3,10 +3,10 @@ version: '3.8'
 services:
   mysql:
     image: mysql:latest
-    container_name: mysql_gvsv
+    container_name: mysql_dvsv
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: gvsv
+      MYSQL_DATABASE: dvsv
       MYSQL_CHARSET: utf8mb4
     ports:
       - "3307:3306"
@@ -16,7 +16,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:management
-    container_name: rabbitmq_gvsv
+    container_name: rabbitmq_dvsv
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin
