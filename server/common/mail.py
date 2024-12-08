@@ -1,48 +1,55 @@
 import random
-import os
-import sys
-
-from django.core.mail import send_mail
-import django
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'server.settings')
-
-django.setup()
 import smtplib
 
+from email.mime.text import MIMEText
+from email.header import Header
+from config.read_config import app_config
 
-def send_verification_code(to_email:str) -> int:
-    """
-    发送邮箱验证码
-    :param to_email: 目标邮箱地址
-    :return: 成功返回 验证码 ，失败返回-1
-    """
-    sms_code = '%06d' % random.randint(1, 999999)
-    EMAIL_FROM = 'captcha.test456@outlook.com'
-    email_title = '验证码'
-    emai_body = f"您的邮箱注册验证码为：{sms_code}，该验证码有效时间为两分钟，请及时进行验证。"
-    send_status = send_mail(email_title, emai_body, EMAIL_FROM, [to_email])
-    if send_status == 0 :
-        return send_status
-    else :
-        return -1
+email_config = app_config['email']
 
-def test2(to_email:str) -> int:
-    """
-    发送邮箱验证码
-    :param to_email: 目标邮箱地址
-    :return: 成功返回 验证码 ，失败返回-1
-    """
-    sms_code = '%06d' % random.randint(1, 999999)
-    EMAIL_FROM = 'captcha.test456@outlook.com'
-    email_title = '验证码'
-    emai_body = f"您的邮箱注册验证码为：{sms_code}，该验证码有效时间为两分钟，请及时进行验证。"
-    send_status = send_mail(email_title, emai_body, EMAIL_FROM, [to_email])
-    if send_status == 0 :
-        return send_status
-    else :
-        return -1
+message_type = {
+    'register' : "这是您用于注册的验证码: ",
+    'forget' : "这是您用于找回密码的验证码: "
+}
 
-status = send_verification_code(to_email='huanghongweimax@163.com')
-print(status)
+class Mail:
+    def __init__(self, use_type):
+        self.send_message = None
+        self.smtp_server =  email_config['server']
+        self.port = email_config['port']
+        self.sender = email_config['sender']
+        self.password = email_config['password']
+
+        self.verify_code = 0
+        self.message = message_type[use_type]
+        self.recipient_email = None
+        self.result = None
+
+    def create_mail(self):
+        self.generate_verify_code()
+        self.message += self.verify_code
+        self.send_message = MIMEText(self.message, 'plain', 'utf-8')
+        self.send_message['From'] = Header(self.sender, 'utf-8')
+        self.send_message['To'] = Header(self.recipient_email, 'utf-8')
+        self.send_message['Subject'] = Header('验证码', 'utf-8')
+
+    def send_mail(self, recipient):
+        try:
+            # 连接邮件服务器并登录
+            self.recipient_email = recipient
+            smtp_connection = smtplib.SMTP(self.smtp_server, self.port)
+            smtp_connection.login(self.sender, self.password)
+            self.create_mail()
+
+            # 发送验证码
+            smtp_connection.sendmail(self.sender, self.recipient_email, self.send_message.as_string())
+
+            smtp_connection.quit()
+            self.result = True
+        except Exception as e:
+            print(e)
+            self.result = False
+
+    def generate_verify_code(self):
+        random_list = list(map(lambda x:random.randint(0,9), [y for y in range(6)]))
+        self.verify_code = "".join('%s' % i for i in random_list)
