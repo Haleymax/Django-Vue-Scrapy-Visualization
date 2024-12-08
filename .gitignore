@@ -8,3 +8,8 @@ backend/.idea
 **/rabbitmq/
 /test
 **/.idea
+server/server/__pycache__
+server/config/config.yml
+server/user/__pycache__
+server/user/migrations/__pycache__
+server/config/config.yml
