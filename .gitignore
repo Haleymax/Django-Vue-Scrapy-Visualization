@@ -1,5 +1,6 @@
 .venv/
 **/.venv/
+**/venv
 backend/DVSV/DVSV/__pycache__
 backend/.idea
 **/.idea/
