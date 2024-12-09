@@ -32,6 +32,8 @@
 <script setup lang="ts" name="SignIn">
 import { reactive, defineEmits } from 'vue';
 import { useLoginForm } from '@/store/home';
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 const showLoginForm = useLoginForm();
 const emit = defineEmits(['close']); 
@@ -40,6 +42,14 @@ const siginForm = reactive({
     email: "",
     password: "",
 });
+
+const Result = reactive({
+    show:false,
+    email: '',
+    password: '',
+    success: '',
+    verify_code: '',
+})
 
 const rules = {
     email: [
@@ -51,6 +61,19 @@ const rules = {
 
 const login = async () => {
     console.log("发送登录请求");
+    const fromData = siginForm;
+
+    //对密码进行加密
+    const encryptedPassword = CryptoJS.MD5(fromData.password).toString();
+    fromData.password = encryptedPassword;
+
+    try {
+        const response = await axios.post('127.0.0.1:8000/register_user', fromData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
 };
 
 const close = () => {
