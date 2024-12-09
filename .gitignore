@@ -13,3 +13,6 @@ server/config/config.yml
 server/user/__pycache__
 server/user/migrations/__pycache__
 server/config/config.yml
+server/.env/Lib/site-packages/_distutils_hack/__pycache__
+server/.env
+server/test
