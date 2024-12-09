@@ -1,5 +1,7 @@
 import random
 import smtplib
+import time
+from datetime import datetime
 
 from email.mime.text import MIMEText
 from email.header import Header
@@ -13,17 +15,20 @@ message_type = {
 }
 
 class Mail:
-    def __init__(self, use_type):
+    def __init__(self):
         self.send_message = None
         self.smtp_server =  email_config['server']
         self.port = email_config['port']
         self.sender = email_config['sender']
         self.password = email_config['password']
-
+        self.send_time = None
         self.verify_code = 0
-        self.message = message_type[use_type]
+        self.message = None
         self.recipient_email = None
         self.result = None
+
+    def set_type(self, use_type):
+        self.message = message_type[use_type]
 
     def create_mail(self):
         self.generate_verify_code()
@@ -43,6 +48,8 @@ class Mail:
 
             # 发送验证码
             smtp_connection.sendmail(self.sender, self.recipient_email, self.send_message.as_string())
+            now = datetime.now()
+            self.send_time = int(time.mktime(now.timetuple()))
 
             smtp_connection.quit()
             self.result = True
@@ -53,3 +60,6 @@ class Mail:
     def generate_verify_code(self):
         random_list = list(map(lambda x:random.randint(0,9), [y for y in range(6)]))
         self.verify_code = "".join('%s' % i for i in random_list)
+
+def get_mail():
+    return Mail()
