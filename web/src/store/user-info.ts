@@ -9,8 +9,14 @@ export const useUserInfo = defineStore('UserInfo', () => {
             password:'',
         },
         message: {
-            email:'',
-            password:'',
+            email:{
+                msg:"dasdasdasdas",
+                type:"primary"
+            },
+            password:{
+                msg:"asdasdasdasdasdas",
+                type:"primary",
+            }
         }
     }) 
 
