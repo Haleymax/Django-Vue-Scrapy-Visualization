@@ -2,7 +2,7 @@
     <div class="signin-div">
         <div class="loginPart">
             <div class="header">
-                
+
                 <div class="label">
                     <h2>用户登录</h2>
                 </div>
@@ -11,20 +11,29 @@
                 </div>
             </div>
             <div class="form">
-                <el-form :model="user_info.siginForm.data" :rules="rules" label-width="100px" style="transform: translate(-30px)">
+                <el-form :model="user_info.siginForm.data" :rules="rules" label-width="100px"
+                    style="transform: translate(-30px)">
                     <el-form-item label="邮箱" prop="email">
                         <el-input v-model="user_info.siginForm.data.email" placeholder="请输入邮箱" clearable></el-input>
                     </el-form-item>
                     <span class="message-container">
-                        <el-text v-if="user_info.siginForm.message.email.msg" :type="user_info.siginForm.message.email.type">{{ user_info.siginForm.message.email.msg }}</el-text>
+                        <el-text v-if="user_info.siginForm.message.email.msg"
+                            :type=user_info.siginForm.message.email.type>{{ user_info.siginForm.message.email.msg
+                            }}</el-text>
                     </span>
-                    
+
                     <el-form-item label="密码" prop="password">
-                        <el-input type="password" v-model="user_info.siginForm.data.password" placeholder="请输入密码" show-password clearable></el-input>
+                        <el-input type="password" v-model="user_info.siginForm.data.password" placeholder="请输入密码"
+                            show-password clearable></el-input>
                     </el-form-item>
+                    <span class="message-container2">
+                        <el-text v-if="user_info.siginForm.message.password.msg"
+                            :type=user_info.siginForm.message.password.type>{{ user_info.siginForm.message.password.msg
+                            }}</el-text>
+                    </span>
                     <el-button class="btn" type="primary" @click="login">登陆</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="danger" style="margin-right: 140px" >忘记密码？</el-link>
+                        <el-link type="danger" style="margin-right: 140px">忘记密码？</el-link>
                         <el-link type="warning" @click="showLoginForm.showSignUpForm">没有账号？去注册</el-link>
                     </div>
                 </el-form>
@@ -43,12 +52,12 @@ import CryptoJS from 'crypto-js';
 const showLoginForm = useLoginForm();
 const user_info = useUserInfo()
 
-const emit = defineEmits(['close']); 
+const emit = defineEmits(['close']);
 
 
 const rules = {
     email: [
-     
+
     ],
     password: [
     ]
@@ -72,7 +81,7 @@ const login = async () => {
 };
 
 const close = () => {
-    emit('close'); 
+    emit('close');
 };
 </script>
 
@@ -92,12 +101,12 @@ const close = () => {
     box-sizing: border-box;
     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
-    padding: 20px; 
+    padding: 20px;
 }
 
 .header {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 20px;
@@ -109,11 +118,21 @@ const close = () => {
 }
 
 .message-container {
-    text-align: center;
+    position: absolute;
+    top: 26px;
+    left: 110px;
+}
+
+.message-container2 {
+    position: absolute;
+    top: 79px;
+    /* 距离父元素顶部20px */
+    left: 110px;
+    /* 距离父元素左侧30px */
 }
 
 .label {
-    flex: 1; 
+    flex: 1;
     text-align: center;
 }
 
@@ -129,7 +148,8 @@ const close = () => {
 }
 
 h2 {
-    margin: 0; /* 去掉默认的 margin */
+    margin: 0;
+    /* 去掉默认的 margin */
     padding: 0;
     color: #000;
     text-align: center;
