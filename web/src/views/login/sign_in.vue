@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts" name="SignIn">
-import { reactive, defineEmits } from 'vue';
+import { reactive, defineEmits, watch } from 'vue';
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
 import axios from 'axios';
@@ -62,6 +62,12 @@ const rules = {
     password: [
     ]
 };
+
+watch(user_info.siginForm.data, () => {
+    console.log("输入框发生变化，清空提示消息")
+    user_info.siginForm.message.email.msg = ""
+    user_info.siginForm.message.password.msg = ""
+}, {deep: true});
 
 const login = async () => {
     console.log("发送登录请求");

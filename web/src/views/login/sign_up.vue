@@ -58,15 +58,22 @@
 </template>
 
 <script setup lang="ts" name="SignUp">
-import { reactive } from 'vue';
-import { ElForm } from 'element-plus'; // 导入ElForm类型（如果需要类型检查）
-import Login from './Login.vue';
+import { reactive, watch } from 'vue';
+import { ElForm } from 'element-plus'; 
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
 
 const emit = defineEmits(['close']); 
 const showLoginForm = useLoginForm();
 const user_info = useUserInfo();
+
+watch(user_info.sigupForm.data, () => {
+    console.log("注册框发生了变化，清空提示消息")
+    user_info.sigupForm.message.email.msg = "";
+    user_info.sigupForm.message.password.msg = "";
+    user_info.sigupForm.message.confirmpassword.msg = "";
+    user_info.sigupForm.message.verify_code.msg = "";
+})
 
 
 const siginForm = reactive({
