@@ -39,8 +39,8 @@
                     </span>
 
                     <el-form-item label="验证码" prop="code">
-                        <el-input style="width: 100px;" v-model="user_info.sigupForm.data.verify_code" placeholder="验证码" clearable></el-input>
-                        <div>验证码图片</div>
+                        <el-input style="width: 150px;" v-model="user_info.sigupForm.data.verify_code" placeholder="验证码" clearable></el-input>
+                        <el-button class="btn-verification" type="primary" @click="login">{{ verification_btn_text }}</el-button>
                     </el-form-item>
 
                     <span class="message-container4">
@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts" name="SignUp">
-import { reactive, watch } from 'vue';
+import { reactive, watch, ref } from 'vue';
 import { ElForm } from 'element-plus'; 
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
@@ -74,6 +74,14 @@ watch(user_info.sigupForm.data, () => {
     user_info.sigupForm.message.confirmpassword.msg = "";
     user_info.sigupForm.message.verify_code.msg = "";
 })
+
+const verification_btn_text = ref<string | number>("验证码")
+
+const servers_status_message = {
+    "1": "用户已存在",
+    "2": "密码不合规",
+    "3": "验证码错误"
+}
 
 
 const siginForm = reactive({
@@ -103,6 +111,7 @@ const rules = {
 const login = async () => {
     console.log("发送注册请求");
 }
+
 
 const close = () => {
     emit('close'); 
@@ -156,6 +165,14 @@ const close = () => {
     width: 80px;
     height: 40px;
     font-size: 15px;
+}
+
+.btn-verification{
+    transform: translate(50px);
+    width: 60px;
+    height: 35px;
+    font-size: 12px;
+    background-color: #d413e6;
 }
 
 .message-container {
