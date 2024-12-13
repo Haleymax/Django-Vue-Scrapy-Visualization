@@ -6,6 +6,7 @@ backend/.idea
 **/.idea/
 **/mysql/
 **/rabbitmq/
+**/redis/
 /test
 **/.idea
 server/server/__pycache__

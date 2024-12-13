@@ -1,5 +1,8 @@
 asgiref==3.8.1
 Django==5.1.4
+django-redis==5.4.0
+pip==24.3.1
 PyYAML==6.0.2
+redis==5.2.1
 sqlparse==0.5.2
 tzdata==2024.2

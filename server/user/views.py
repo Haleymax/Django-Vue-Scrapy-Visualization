@@ -1,8 +1,12 @@
 import json
+import logging
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.core.cache import cache
+from django.views.decorators.csrf import csrf_exempt
 
+import common
 from common.mail import get_mail
 from user import models
 
@@ -18,6 +22,52 @@ def add_user(request):
     user.save()
     return HttpResponse("ok")
 
+@csrf_exempt
+def send_verification_code(request):
+    result = {}
+    if request.method == "POST":
+        try:
+
+            if not request.body:
+                raise ValueError("the request cannot be empty")
+
+            logging.info(f"post data is : {request.body}")
+
+            data = json.loads(request.body)
+            logging.info(f"data: {data}")
+            if 'user_email' not in data or 'use_type' not in data:
+                raise ValueError("the request must contain 'user_email' and 'use_type'")
+            user_email = data['user_email']
+            use_type = data['use_type']
+
+            if '@' not in user_email:
+                raise ValueError("the mailbox is incorrect formatted")
+
+
+            email_client = common.mail.get_mail()
+            email_client.set_type(use_type)
+            email_client.send_mail(user_email)
+            if email_client.result :
+                logging.info("the verification code is sent successfully")
+                result['message'] = "the verification code is sent successfully"
+                result['status'] = 0
+
+                cache.set(user_email, email_client.verify_code, timeout=300)
+
+            else:
+                logging.info("the verification code is not sent successfully")
+                result['message'] = "the verification code is not sent successfully"
+                result['status'] = 1
+
+        except Exception as e:
+            logging.error(e)
+            result['message'] = f"error:{e}"
+        finally:
+            return HttpResponse(json.dumps(result), content_type="application/json", status=200)
+    else:
+        result['message'] = "the request must be POST"
+        result['status'] = 6
+        return HttpResponse(json.dumps(result), content_type="application/json", status=405)
 
 def register_user(request):
     message = {}
@@ -30,10 +80,6 @@ def register_user(request):
             password = data.get('password')
             verify_code = data.get('verify_code')
 
-            if not email :
-                message['email'] = '邮箱不能为空'
-            if not password :
-                message['password'] = '密码不能为空'
 
             if len(password) < 8 or len(password) > 15:
                 message['password'] = '密码长度不能低于8位或超过15位'

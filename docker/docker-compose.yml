@@ -25,3 +25,12 @@ services:
       - "15672:15672"
     volumes:
       - ./data/rabbitmq:/var/lib/rabbitmq
+
+  redis:
+    image: redis:latest
+    container_name: redis_dvsv
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    restart: always
