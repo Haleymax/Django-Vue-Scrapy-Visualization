@@ -64,8 +64,8 @@ def send_verification_code(request):
         result['status'] = 6
         return HttpResponse(json.dumps(result), content_type="application/json", status=405)
 
-def register_user(request):
-    message = {}
+def register(request):
+    result = {}
     if request.method == 'POST':
         try:
 
@@ -76,18 +76,18 @@ def register_user(request):
 
 
             if len(password) < 8 or len(password) > 15:
-                message['password'] = '密码长度不能低于8位或超过15位'
+                result['password'] = '密码长度不能低于8位或超过15位'
                 return HttpResponse(json.dumps(message))
 
             if verify_code == email_client.verify_code:
                 user = models.User(user_email=email,user_password=password)
                 user.save()
-                message['success'] = '注册成功'
+                result['success'] = '注册成功'
                 return HttpResponse(json.dumps(message), status=201)
             elif verify_code == '' :
-                message['verify_code'] = '验证码不能为空'
+                result['verify_code'] = '验证码不能为空'
             elif verify_code != email_client.verify_code:
-                message['verify_code'] = '验证码不正确'
+                result['verify_code'] = '验证码不正确'
 
             return HttpResponse(json.dumps(message), status=400)
 
