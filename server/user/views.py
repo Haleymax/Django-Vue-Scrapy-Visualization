@@ -2,7 +2,6 @@ import json
 import logging
 
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 
@@ -31,18 +30,14 @@ def send_verification_code(request):
             if not request.body:
                 raise ValueError("the request cannot be empty")
 
-            logging.info(f"post data is : {request.body}")
+            user_email = request.POST.get('user_email', None)
+            use_type = request.POST.get('use_type', None)
 
-            data = json.loads(request.body)
-            logging.info(f"data: {data}")
-            if 'user_email' not in data or 'use_type' not in data:
+            if not user_email or not use_type:
                 raise ValueError("the request must contain 'user_email' and 'use_type'")
-            user_email = data['user_email']
-            use_type = data['use_type']
 
             if '@' not in user_email:
                 raise ValueError("the mailbox is incorrect formatted")
-
 
             email_client = common.mail.get_mail()
             email_client.set_type(use_type)
@@ -52,7 +47,7 @@ def send_verification_code(request):
                 result['message'] = "the verification code is sent successfully"
                 result['status'] = 0
 
-                cache.set(user_email, email_client.verify_code, timeout=300)
+                cache.set(user_email, email_client.verify_code, timeout=1000)
 
             else:
                 logging.info("the verification code is not sent successfully")
@@ -73,12 +68,11 @@ def register_user(request):
     message = {}
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)
 
             # 从前端表单中提取用户信息
-            email = data.get('email')
-            password = data.get('password')
-            verify_code = data.get('verify_code')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            verify_code = request.POST.get('verify_code')
 
 
             if len(password) < 8 or len(password) > 15:
