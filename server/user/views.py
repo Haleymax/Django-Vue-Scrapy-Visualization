@@ -74,25 +74,35 @@ def register(request):
             password = request.POST.get('password')
             verify_code = request.POST.get('verify_code')
 
+            cache_verify_code = cache.get(email)
 
+            # 验证邮箱和密码格式
+            if not email or not password or not verify_code:
+                raise ValueError("The request must contain email, password, and verify_code.")
             if len(password) < 8 or len(password) > 15:
-                result['password'] = '密码长度不能低于8位或超过15位'
-                return HttpResponse(json.dumps(message))
+                raise ValueError("Password length must be between 8 and 15 characters.")
 
-            if verify_code == email_client.verify_code:
+            # 从缓存中获取验证码
+            cached_verify_code = cache.get(email)
+            if cached_verify_code is None or cached_verify_code != verify_code:
+                raise ValueError("The verification code is incorrect or has expired.")
+
+            if verify_code == cache_verify_code:
                 user = models.User(user_email=email,user_password=password)
                 user.save()
                 result['success'] = '注册成功'
-                return HttpResponse(json.dumps(message), status=201)
-            elif verify_code == '' :
-                result['verify_code'] = '验证码不能为空'
-            elif verify_code != email_client.verify_code:
-                result['verify_code'] = '验证码不正确'
+                result['status'] = 0
 
-            return HttpResponse(json.dumps(message), status=400)
-
-        except json.JSONDecodeError:
-            return HttpResponse({'error' : '无效请求'}, status = 405)
-
-
-    return HttpResponse({'error' : "无效请求，请检查发送表达"}, status = 405)
+        except ValueError as e:
+            result['message'] = f"error:{e}"
+            result['status'] = 3
+        except Exception as e:
+            result['message'] = f"error:{e}"
+            result['status'] = 5
+            return HttpResponse(json.dumps(result), content_type="application/json", status=400)
+        finally:
+            return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+    else:
+        result['message'] = "the request must be POST"
+        result['status'] = 4
+        return HttpResponse(json.dumps(result), status = 405)
