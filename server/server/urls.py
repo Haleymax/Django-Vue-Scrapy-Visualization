@@ -24,5 +24,9 @@ urlpatterns = [
     path('user', views.index ),
     path('add_user', views.add_user),
 
-    path('verification_code', views.send_verification_code)
+    path('verification_code', views.send_verification_code),
+
+    path('register', views.register),
+
+    path('login', views.login_user)
 ]

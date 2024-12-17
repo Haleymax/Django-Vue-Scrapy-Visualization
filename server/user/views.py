@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.db.models.expressions import result
 from django.http import HttpResponse
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
@@ -8,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import common
 from common.mail import get_mail
 from user import models
+from user.models import User
 
 email_client = get_mail()
 
@@ -20,6 +22,29 @@ def add_user(request):
     user = models.User(user_email='hongwei.huang@outlook.com',user_password='123456')
     user.save()
     return HttpResponse("ok")
+
+@csrf_exempt
+def login_user(request):
+    result = {}
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        try:
+            user = User.objects.get(email=email)
+            if user.check_password(password, user.user_password):
+                result['status'] = 'success'
+            else:
+                result['status'] = 'fail'
+        except Exception as e:
+            result['status'] = 'fail'
+        return HttpResponse(json.dumps(result), status=200)
+    else:
+        result['status'] = 'fail'
+        return HttpResponse(json.dumps(result), status=400)
+
+
+
 
 @csrf_exempt
 def send_verification_code(request):
@@ -64,11 +89,11 @@ def send_verification_code(request):
         result['status'] = 6
         return HttpResponse(json.dumps(result), content_type="application/json", status=405)
 
+@csrf_exempt
 def register(request):
     result = {}
     if request.method == 'POST':
         try:
-
             # 从前端表单中提取用户信息
             email = request.POST.get('email')
             password = request.POST.get('password')
