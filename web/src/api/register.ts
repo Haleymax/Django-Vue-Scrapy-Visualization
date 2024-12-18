@@ -1,4 +1,5 @@
 import axios from 'axios';
+import read
 
 //发送验证码
 export const sendVerificationCode = async (userId:string):Promise<void> => {
