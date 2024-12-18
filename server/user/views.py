@@ -4,6 +4,7 @@ import logging
 from django.db.models.expressions import result
 from django.http import HttpResponse
 from django.core.cache import cache
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 import common
@@ -30,15 +31,20 @@ def login_user(request):
         email = request.POST['email']
         password = request.POST['password']
 
-        try:
-            user = User.objects.get(email=email)
-            if user.check_password(password, user.user_password):
-                result['status'] = 'success'
-            else:
-                result['status'] = 'fail'
-        except Exception as e:
-            result['status'] = 'fail'
+        result['name'] = email
+        user = User.objects.get(user_email=email)
+        result['usr'] = user.user_password
         return HttpResponse(json.dumps(result), status=200)
+
+        # try:
+        #     user = User.objects.get(email=email)
+        #     if user.check_password(password, user.user_password):
+        #         result['status'] = 'success'
+        #     else:
+        #         result['status'] = 'fail'
+        # except Exception as e:
+        #     result['status'] = 'fail'
+        # return HttpResponse(json.dumps(result), status=200)
     else:
         result['status'] = 'fail'
         return HttpResponse(json.dumps(result), status=400)
