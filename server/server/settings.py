@@ -138,6 +138,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 存储session的信息
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 # settings.py
 
 #配置用于发送验证码的邮箱

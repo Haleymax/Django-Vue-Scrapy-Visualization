@@ -20,3 +20,4 @@ server/test
 .idea
 server/common/__pycache__
 server/config/__pycache__
+server/user/common/__pycache__
