@@ -62,7 +62,7 @@ import { reactive, watch, ref } from 'vue';
 import { ElForm } from 'element-plus'; 
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
-import { sendVerificationCode } from '@/api/register';
+import { sendVerificationCode, register } from '@/api/register';
 
 const emit = defineEmits(['close']); 
 const showLoginForm = useLoginForm();
@@ -124,7 +124,19 @@ const sendCode = async () => {
 
 //发送注册请求
 const login = async () => {
-    console.log("发送注册请求");
+    try {
+        const data = {
+            email: user_info.sigupForm.data.email,
+            password: user_info.sigupForm.data.password,
+            verify_code: user_info.sigupForm.data.verify_code,
+        };
+        const response = await register(data);
+        user_info.sigupForm.message.email.msg = response.message;
+        user_info.sigupForm.message.email.type = '';
+    } catch (error) {
+        user_info.sigupForm.message.email.msg = "注册失败，请重试";
+        user_info.sigupForm.message.email.type = 'error';
+    }
 }
 
 
