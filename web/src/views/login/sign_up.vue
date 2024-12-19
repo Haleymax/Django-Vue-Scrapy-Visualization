@@ -40,7 +40,7 @@
 
                     <el-form-item label="验证码" prop="code">
                         <el-input style="width: 150px;" v-model="user_info.sigupForm.data.verify_code" placeholder="验证码" clearable></el-input>
-                        <el-button class="btn-verification" type="primary" @click="login">{{ verification_btn_text }}</el-button>
+                        <el-button class="btn-verification" type="primary" @click="sendCode">{{ verification_btn_text }}</el-button>
                     </el-form-item>
 
                     <span class="message-container4">
@@ -62,6 +62,7 @@ import { reactive, watch, ref } from 'vue';
 import { ElForm } from 'element-plus'; 
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
+import { sendVerificationCode } from '@/api/register';
 
 const emit = defineEmits(['close']); 
 const showLoginForm = useLoginForm();
@@ -105,6 +106,20 @@ const rules = {
     code: [
         { required: true, message: '请输入验证码', trigger: 'blur' }
     ]
+};
+
+const sendCode = async () => {
+    try {
+        const data = {
+            email: user_info.sigupForm.data.email,
+            use_type: "register"
+        };
+        const response = await sendVerificationCode(data);
+        user_info.sigupForm.message.verify_code.msg = response.message;
+        user_info.sigupForm.message.verify_code.type = '';
+    } catch (error) {
+        user_info.sigupForm.message.verify_code.msg = '验证码发送失败，请重试。';
+    }
 };
 
 //发送注册请求

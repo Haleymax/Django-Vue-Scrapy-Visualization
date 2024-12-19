@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import common
 from common.mail import get_mail
 from user import models
+from user.common.auth_utiles import authenticate
 from user.models import User
 
 email_client = get_mail()
@@ -31,20 +32,12 @@ def login_user(request):
         email = request.POST['email']
         password = request.POST['password']
 
-        result['name'] = email
-        user = User.objects.get(user_email=email)
-        result['usr'] = user.user_password
-        return HttpResponse(json.dumps(result), status=200)
-
-        # try:
-        #     user = User.objects.get(email=email)
-        #     if user.check_password(password, user.user_password):
-        #         result['status'] = 'success'
-        #     else:
-        #         result['status'] = 'fail'
-        # except Exception as e:
-        #     result['status'] = 'fail'
-        # return HttpResponse(json.dumps(result), status=200)
+        ret = authenticate(email, password, result)
+        if ret:
+            request.session.set_test_cookie()
+            return HttpResponse(json.dumps(result), status=201)
+        else:
+            return HttpResponse(json.dumps(result), status=201)
     else:
         result['status'] = 'fail'
         return HttpResponse(json.dumps(result), status=400)
