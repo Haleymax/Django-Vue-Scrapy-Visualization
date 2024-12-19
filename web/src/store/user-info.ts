@@ -10,12 +10,12 @@ export const useUserInfo = defineStore('UserInfo', () => {
         },
         message: {
             email:{
-                msg:"dasdasdasdas",
-                type:"danger"
+                msg:"",
+                type:""
             },
             password:{
-                msg:"asdasdasdasdasdas",
-                type:"danger",
+                msg:"",
+                type:"",
             }
         }
     }) 
@@ -29,20 +29,20 @@ export const useUserInfo = defineStore('UserInfo', () => {
         },
         message:{
             email:{
-                msg:"1111111111111111111",
-                type:"danger",
+                msg:"",
+                type:"",
             },
             password:{
-                msg:"22222222222222222222",
-                type:"danger",
+                msg:"",
+                type:"",
             },
             confirmpassword:{
-                msg:"33333333333333333333333333",
-                type:"danger",
+                msg:"",
+                type:"",
             },
             verify_code:{
-                msg:"444444444444444444444444",
-                type:"danger",
+                msg:"",
+                type:"",
             },
         }
     });

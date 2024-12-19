@@ -44,9 +44,10 @@ export const sendVerificationCode = async (data: VerificationData): Promise<Resp
 export const register = async (data: RegisterData): Promise<ResponseData> => {
     try {
         const params = new URLSearchParams();
-        params.append('user_email', data.email);
+        params.append('email', data.email);
         params.append('password', data.password);
         params.append('verify_code', data.verify_code);
+        console.log(params)
 
         const response = await axios.post('http://127.0.0.1:8000/register', params, {
             headers: {

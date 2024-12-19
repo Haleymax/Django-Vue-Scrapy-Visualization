@@ -14,3 +14,4 @@ sqlparse==0.5.3
 typing_extensions==4.12.2
 tzdata==2024.2
 wheel==0.41.2
+django-cors-headers==4.6.0

@@ -58,34 +58,39 @@ def send_verification_code(request):
             use_type = request.POST.get('use_type', None)
 
             if not user_email or not use_type:
-                raise ValueError("the request must contain 'user_email' and 'use_type'")
+                result['status'] = 0
+                result['message'] = '邮箱地址不能为空'
 
             if '@' not in user_email:
-                raise ValueError("the mailbox is incorrect formatted")
+                result['status'] = 2
+                result['message'] = '邮箱地址格式不正确'
+
+            if cache.get(user_email):
+                result['status'] = 5
+                result['message'] = '以发送请及时接收'
+                return HttpResponse(json.dumps(result), status=201)
 
             email_client = common.mail.get_mail()
             email_client.set_type(use_type)
             email_client.send_mail(user_email)
             if email_client.result :
                 logging.info("the verification code is sent successfully")
-                result['message'] = "the verification code is sent successfully"
+                result['message'] = "验证码发送成功"
                 result['status'] = 0
-
                 cache.set(user_email, email_client.verify_code, timeout=1000)
-
             else:
                 logging.info("the verification code is not sent successfully")
-                result['message'] = "the verification code is not sent successfully"
-                result['status'] = 1
+                result['message'] = "验证码发送失败"
+                result['status'] = 3
 
         except Exception as e:
-            logging.error(e)
-            result['message'] = f"error:{e}"
+            result['message'] = f"the verification code is not sent successfully:{e}"
+            result['status'] = 3
         finally:
-            return HttpResponse(json.dumps(result), content_type="application/json", status=200)
+            return HttpResponse(json.dumps(result), content_type="application/json", status=201)
     else:
-        result['message'] = "the request must be POST"
-        result['status'] = 6
+        result['message'] = "请求方式错误"
+        result['status'] = 4
         return HttpResponse(json.dumps(result), content_type="application/json", status=405)
 
 @csrf_exempt

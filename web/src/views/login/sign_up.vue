@@ -78,36 +78,15 @@ watch(user_info.sigupForm.data, () => {
 
 const verification_btn_text = ref<string | number>("验证码")
 
-const servers_status_message = {
+const register_status_message = {
     "1": "用户已存在",
     "2": "密码不合规",
     "3": "验证码错误"
 }
 
 
-const siginForm = reactive({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    code: "",
-});
 
-const rules = {
-    email: [
-        { required: true, message: '请输入邮箱', trigger: 'blur' },
-        { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
-    ],
-    password: [
-        { required: true, message: '请输入密码', trigger: 'blur' }
-    ],
-    confirmPassword: [
-        { required: true, message: '请确认密码', trigger: 'blur' }
-    ],
-    code: [
-        { required: true, message: '请输入验证码', trigger: 'blur' }
-    ]
-};
-
+//发送验证码请求
 const sendCode = async () => {
     try {
         const data = {
@@ -115,8 +94,14 @@ const sendCode = async () => {
             use_type: "register"
         };
         const response = await sendVerificationCode(data);
-        user_info.sigupForm.message.verify_code.msg = response.message;
-        user_info.sigupForm.message.verify_code.type = '';
+        if( response['status'] == 0){
+            alert("验证码发送成功")
+        }
+        else{
+            user_info.sigupForm.message.verify_code.msg = response.message;
+            user_info.sigupForm.message.verify_code.type = 'danger';
+        }
+            
     } catch (error) {
         user_info.sigupForm.message.verify_code.msg = '验证码发送失败，请重试。';
     }
