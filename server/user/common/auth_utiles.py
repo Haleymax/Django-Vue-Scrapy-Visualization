@@ -11,13 +11,13 @@ def authenticate(email:str, password:str , result:dict[str:Any]) -> bool:
         user = User.objects.get(user_email=email)
         if password == user.user_password:
             result['status_code'] = 0
-            result['message'] = 'login successful'
+            result['message'] = '登录成功'
             return True
         else:
             result['status_code'] = 1
-            result['message'] = 'wrong password'
+            result['message'] = '密码错误'
             return False
     except ObjectDoesNotExist:
         result['status_code'] = 2
-        result['message'] = 'user does not exist'
+        result['message'] = '用户不存在'
         return False

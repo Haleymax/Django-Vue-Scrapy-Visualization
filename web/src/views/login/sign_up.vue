@@ -47,7 +47,7 @@
                         <el-text v-if="user_info.sigupForm.message.verify_code.msg" :type=user_info.sigupForm.message.verify_code.type>{{ user_info.sigupForm.message.verify_code.msg }}</el-text>
                     </span>
 
-                    <el-button class="btn" type="primary" @click="login">注册</el-button>
+                    <el-button class="btn" type="primary" @click="singup">注册</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
                         <el-link type="warning" style="margin-right: 140px" @click = showLoginForm.showLoginForm>已有账号？去登录</el-link>
                     </div>
@@ -108,7 +108,7 @@ const sendCode = async () => {
 };
 
 //发送注册请求
-const login = async () => {
+const singup = async () => {
     try {
         const data = {
             email: user_info.sigupForm.data.email,
