@@ -1,5 +1,5 @@
 <template>
-    <div class="signin-div">
+    <div class="findPassword-div">
         <div class="loginPart">
             <div class="header">
 
@@ -20,34 +20,16 @@
                         <el-text v-if="user_info.sigupForm.message.email.msg" :type=user_info.sigupForm.message.email.type>{{ user_info.sigupForm.message.email.msg }}</el-text>
                     </span>
 
-                    <el-form-item label="密码" prop="password">
-                        <el-input class="input-box" type="password" v-model="user_info.sigupForm.data.password" placeholder="请输入密码"
-                            show-password clearable></el-input>
-                    </el-form-item>
-
-                    <span class="message-container2">
-                        <el-text v-if="user_info.sigupForm.message.password.msg" :type=user_info.sigupForm.message.password.type>{{ user_info.sigupForm.message.password.msg }}</el-text>
-                    </span>
-
-                    <el-form-item label="确认密码" prop="confirmPassword">
-                        <el-input class="input-box" type="password" v-model="user_info.sigupForm.data.confirmpassword"
-                            placeholder="请再次输入密码" show-password clearable></el-input>
-                    </el-form-item>
-
-                    <span class="message-container3">
-                        <el-text v-if="user_info.sigupForm.message.confirmpassword.msg" :type=user_info.sigupForm.message.confirmpassword.type>{{ user_info.sigupForm.message.confirmpassword.msg }}</el-text>
-                    </span>
-
                     <el-form-item label="验证码" prop="code">
                         <el-input style="width: 150px;" v-model="user_info.sigupForm.data.verify_code" placeholder="验证码" clearable></el-input>
                         <el-button class="btn-verification" type="primary" @click="sendCode">{{ verification_btn_text }}</el-button>
                     </el-form-item>
 
-                    <span class="message-container4">
+                    <span class="message-container2">
                         <el-text v-if="user_info.sigupForm.message.verify_code.msg" :type=user_info.sigupForm.message.verify_code.type>{{ user_info.sigupForm.message.verify_code.msg }}</el-text>
                     </span>
 
-                    <el-button class="btn" type="primary" @click="login">注册</el-button>
+                    <el-button class="btn" type="primary" @click="login">找回密码</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
                         <el-link type="warning" style="margin-right: 140px" @click = showLoginForm.showLoginForm>已有账号？去登录</el-link>
                     </div>
@@ -131,12 +113,12 @@ const close = () => {
 </script>
 
 <style lang="scss" scoped>
-.signin-div {
+.findPassword-div {
     position: fixed;
     top: 20%;
     right: 400px;
     width: 450px;
-    height: 500px;
+    height: 400px;
 }
 
 .label {
@@ -164,7 +146,7 @@ const close = () => {
 
 .loginPart {
     width: 450px;
-    height: 500px;
+    height: 350px;
     background: rgba(32, 84, 182, 0.1);
     box-sizing: border-box;
     box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.5);

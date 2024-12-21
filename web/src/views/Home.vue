@@ -43,6 +43,12 @@
             <SignUp @close="showLoginForm.hideLoginForm" />
         </div>
     </div>
+
+    <div v-if="showLoginForm.isRetrievePassword" class="modal-overlay">
+        <div>
+            <RetrievePassword @close="showLoginForm.hideLoginForm" />
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts" name='Home'>
@@ -53,6 +59,7 @@ import Avatar from '@/components/Avatar.vue'
 import {useLoginForm} from '@/store/home'
 import SignIn from '@/views/login/sign_in.vue'
 import SignUp from '@/views/login/sign_up.vue'
+import RetrievePassword from './login/RetrievePassword.vue'
 
 const showLoginForm = useLoginForm()
 

@@ -30,7 +30,7 @@ class Mail:
     def set_type(self, use_type):
         self.message = message_type[use_type]
 
-    def create_mail(self):
+    def create_verify_code_mail(self):
         self.generate_verify_code()
         self.message += self.verify_code
         self.send_message = MIMEText(self.message, 'plain', 'utf-8')
@@ -38,13 +38,21 @@ class Mail:
         self.send_message['To'] = Header(self.recipient_email, 'utf-8')
         self.send_message['Subject'] = Header('验证码', 'utf-8')
 
+    def create_retrieve_password_mail(self, password):
+        self.message = f"你的密码为: {password}, 请牢记"
+        self.send_message = MIMEText(self.message, 'plain', 'utf-8')
+        self.send_message['From'] = Header(self.sender, 'utf-8')
+        self.send_message['To'] = Header(self.recipient_email, 'utf-8')
+        self.send_message['Subject'] = Header('找回密码', 'utf-8')
+
+
     def send_mail(self, recipient):
         try:
             # 连接邮件服务器并登录
             self.recipient_email = recipient
             smtp_connection = smtplib.SMTP(self.smtp_server, self.port)
             smtp_connection.login(self.sender, self.password)
-            self.create_mail()
+            self.create_verify_code_mail()
 
             # 发送验证码
             smtp_connection.sendmail(self.sender, self.recipient_email, self.send_message.as_string())
