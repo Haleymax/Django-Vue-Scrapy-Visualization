@@ -33,7 +33,7 @@
                     </span>
                     <el-button class="btn" type="primary" @click="SignIn">登陆</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
-                        <el-link type="danger" style="margin-right: 140px">忘记密码？</el-link>
+                        <el-link type="danger" style="margin-right: 140px" @click="showLoginForm.showRetrievePassword">忘记密码？</el-link>
                         <el-link type="warning" @click="showLoginForm.showSignUpForm">没有账号？去注册</el-link>
                     </div>
                 </el-form>
@@ -47,7 +47,7 @@ import { reactive, defineEmits, watch } from 'vue';
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
 import { login } from '@/api/login';
-import axios from 'axios';
+
 
 
 const showLoginForm = useLoginForm();

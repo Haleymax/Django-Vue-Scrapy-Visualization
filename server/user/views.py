@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 import common
 from common.mail import get_mail
 from user import models
-from user.common.auth_utiles import authenticate
+from user.common.auth_utiles import authenticate, retrieve_password_by_email
 from user.models import User
 
 email_client = get_mail()
@@ -121,6 +121,48 @@ def register(request):
                 user.save()
                 result['success'] = '注册成功'
                 result['status'] = 0
+
+        except ValueError as e:
+            result['message'] = f"error:{e}"
+            result['status'] = 3
+        except Exception as e:
+            result['message'] = f"error:{e}"
+            result['status'] = 5
+            return HttpResponse(json.dumps(result), content_type="application/json", status=400)
+        finally:
+            return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+    else:
+        result['message'] = "the request must be POST"
+        result['status'] = 4
+        return HttpResponse(json.dumps(result), status = 405)
+
+@csrf_exempt
+def retrieve_password(request):
+    result = {}
+    if request.method == 'POST':
+        try:
+            # 从前端表单中提取用户信息
+            email = request.POST.get('email')
+            verify_code = request.POST.get('verify_code')
+
+            cache_verify_code = cache.get(email)
+
+            if not email or not verify_code:
+                result['status'] = 1
+                result['message'] = "必须填写邮箱和验证码"
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+
+            if '@' not in email:
+                result['status'] = 2
+                result['message'] = "邮箱地址的格式不正确"
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+
+            ret, db_password = retrieve_password_by_email(email=email, verify_code=verify_code, result=result)
+
+            if not ret:
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+
+                
 
         except ValueError as e:
             result['message'] = f"error:{e}"
