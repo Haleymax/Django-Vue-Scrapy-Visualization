@@ -31,7 +31,7 @@
                             :type=user_info.siginForm.message.password.type>{{ user_info.siginForm.message.password.msg
                             }}</el-text>
                     </span>
-                    <el-button class="btn" type="primary" @click="login">登陆</el-button>
+                    <el-button class="btn" type="primary" @click="SignIn">登陆</el-button>
                     <div style="text-align: right; transform: translate(0, 30px)">
                         <el-link type="danger" style="margin-right: 140px">忘记密码？</el-link>
                         <el-link type="warning" @click="showLoginForm.showSignUpForm">没有账号？去注册</el-link>
@@ -46,8 +46,9 @@
 import { reactive, defineEmits, watch } from 'vue';
 import { useLoginForm } from '@/store/home';
 import { useUserInfo } from '@/store/user-info';
+import { login } from '@/api/login';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
+
 
 const showLoginForm = useLoginForm();
 const user_info = useUserInfo()
@@ -69,26 +70,29 @@ watch(user_info.siginForm.data, () => {
     user_info.siginForm.message.password.msg = ""
 }, {deep: true});
 
-const login = async () => {
-    console.log("发送登录请求");
-    const fromData = user_info.siginForm.data;
-
-    // //对密码进行加密
-    // const encryptedPassword = CryptoJS.MD5(fromData.password).toString();
-    // fromData.password = encryptedPassword;
-
-    // try {
-    //     const response = await axios.post('127.0.0.1:8000/register_user', fromData, {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-    // }
-};
 
 const close = () => {
     emit('close');
 };
+
+
+//发送登录请求
+const SignIn = async () => {
+    console.log("发送登录请求");
+    try {
+        const data = {
+            email: user_info.siginForm.data.email,
+            password: user_info.siginForm.data.password
+        };
+    const response = await login(data);
+    user_info.siginForm.message.email.msg = response.message;
+    user_info.siginForm.message.email.type = 'danger';
+    } catch (error) {
+        user_info.siginForm.message.email.msg = '登录失败，请重试。';
+        user_info.siginForm.message.email.type = 'danger';
+    }
+};
+
 </script>
 
 <style lang="scss" scoped>
