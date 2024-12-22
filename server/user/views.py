@@ -71,7 +71,9 @@ def send_verification_code(request):
                 return HttpResponse(json.dumps(result), status=201)
 
             email_client = common.mail.get_mail()
-            email_client.set_type(use_type)
+            email_client.connect()
+            email_client.set_verification_code_type(use_type)
+            email_client.create_verify_code_mail()
             email_client.send_mail(user_email)
             if email_client.result :
                 logging.info("the verification code is sent successfully")
@@ -144,9 +146,6 @@ def retrieve_password(request):
             # 从前端表单中提取用户信息
             email = request.POST.get('email')
             verify_code = request.POST.get('verify_code')
-
-            cache_verify_code = cache.get(email)
-
             if not email or not verify_code:
                 result['status'] = 1
                 result['message'] = "必须填写邮箱和验证码"
@@ -161,19 +160,26 @@ def retrieve_password(request):
 
             if not ret:
                 return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+            else:
+                email_client = common.mail.get_mail()
+                email_client.connect()
+                email_client.create_retrieve_password_mail(password=db_password)
+                email_client.send_mail(recipient=email)
+                if email_client.result :
+                    result['status'] = 0
+                    result['message'] = "邮件发送成功，请注意查收"
+                    return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+                else:
+                    result['status'] = 3
+                    result['message'] = '邮件发送失败，请重试'
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
 
-                
-
-        except ValueError as e:
-            result['message'] = f"error:{e}"
-            result['status'] = 3
         except Exception as e:
-            result['message'] = f"error:{e}"
-            result['status'] = 5
-            return HttpResponse(json.dumps(result), content_type="application/json", status=400)
+            result['message'] = f"服务器异常，请重试"
+            result['status'] = 4
         finally:
             return HttpResponse(json.dumps(result), content_type="application/json", status=201)
     else:
-        result['message'] = "the request must be POST"
-        result['status'] = 4
+        result['message'] = "请求方式不正确"
+        result['status'] = 5
         return HttpResponse(json.dumps(result), status = 405)
