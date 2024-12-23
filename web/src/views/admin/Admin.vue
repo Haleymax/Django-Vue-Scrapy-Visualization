@@ -16,7 +16,7 @@
                 <el-menu-item index="1-2">修改密码</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="Group 2">
-                <el-menu-item index="1-3">Option 3</el-menu-item>
+                <el-menu-item index="1-3"></el-menu-item>
               </el-menu-item-group>
               <el-sub-menu index="1-4">
                 <template #title>Option4</template>
