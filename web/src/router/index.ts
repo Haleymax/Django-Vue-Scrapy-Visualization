@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from  '@/views/Home.vue'
 import Login from '@/views/login/Login.vue'
+import EchartsComponent from '@/views/chart/SalesData.vue'
 
 const  routes = [ 
     {
         path:'/',
         name:"home",
-        component:Home
+        component:EchartsComponent
     },
     {
         path:'/login',
@@ -14,6 +15,7 @@ const  routes = [
         component:Login
 
     }
+
     
 ]
 
