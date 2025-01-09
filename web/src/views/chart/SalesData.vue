@@ -1,6 +1,7 @@
 <template>
     <div ref="chartContainer" class="chart-container"></div>
     <div ref="CategoryDate" class="chart-container"></div>
+    <div ref="CountryData" class="chart-container"></div>
 </template>
 
 <script setup lang="ts" name="EchartsComponent">
@@ -9,6 +10,7 @@ import * as echarts from 'echarts';
 
 const chartContainer = ref<HTMLDivElement>();
 const CategoryDate = ref<HTMLDivElement>();
+const CountryData = ref<HTMLDivElement>();
 
 const initChart = () => {
     if (chartContainer.value) {
@@ -55,6 +57,32 @@ const initChart = () => {
             ]
         };
         chart.setOption(option);
+
+        if (CountryData.value) {
+            const chart = echarts.init(CountryData.value);
+            const option = {
+            title: {
+                text: '2024年中国跨境电商主要出口国家数据对比'
+            },
+            tooltip: {},
+            series: [
+                {
+                    name: '国家占比',
+                    type: 'pie',
+                    data: [
+                        { value: 600, name: '美国' },
+                        { value: 450, name: '欧洲' },
+                        { value: 300, name: '东南亚' },
+                        { value: 150, name: '日本' },
+                        { value: 100, name: '韩国' },
+                        { value: 80, name: '澳大利亚' },
+                        { value: 120, name: '其他' }
+                    ]
+                }
+            ]
+        };
+        chart.setOption(option);
+        }
     }
 };
 
