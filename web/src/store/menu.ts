@@ -17,7 +17,7 @@ export const menuDataStore = defineStore('menuDate', {
                     id: 2,
                     name: '数据展示',
                     children: [
-                        { id: 21, name: '销售数据', path: '/menu2-1' },
+                        { id: 21, name: '销售数据', path: '/chart' },
                         { id: 22, name: 'Menu 2-2', path: '/menu2-2' },
                         { id: 23, name: 'Menu 2-3', path: '/menu2-3' },
                     ],

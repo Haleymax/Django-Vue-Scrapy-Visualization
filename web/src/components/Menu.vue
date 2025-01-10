@@ -9,7 +9,7 @@
                     <span>{{ item1.name }}</span>
                 </template>
                 <template v-for="(item2, index2) in item1.children">
-                    <el-menu-item class="el" :index="item2.path || item2.id.toString()">
+                    <el-menu-item class="el" :index="item2.path || item2.id.toString()" @click="navigate(item2.path)">
                         {{ item2.name }}
                     </el-menu-item>
                 </template>
@@ -28,6 +28,7 @@
 <script setup lang="ts" name='Menu'>
 import { Location, Menu as IconMenu } from '@element-plus/icons-vue';
 import { menuDataStore } from '@/store/menu'
+import { defineEmits } from 'vue';
 
 const handleOpen = (key: string, keyPath: string[]) => {
     console.log(key, keyPath);
@@ -37,7 +38,16 @@ const handleClose = (key: string, keyPath: string[]) => {
     console.log(key, keyPath);
 };
 
+const emit = defineEmits<{
+    (event: 'navigate', path: string): void;
+}>();
+
+
 const menuData = menuDataStore().menuDate
+
+const navigate = (path:string) => {
+    emit('navigate', path)
+}
 
 </script>
 

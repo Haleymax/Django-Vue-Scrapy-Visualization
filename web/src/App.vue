@@ -9,8 +9,8 @@ import EchartsComponent from '@/views/chart/SalesData.vue'
 </script>
 
 <template>
-
-  <router-view></router-view>
+  <Home></Home>
+  
    <!-- <Login></Login> -->
     <!-- <Admin></Admin>
      <EchartsComponent></EchartsComponent> -->

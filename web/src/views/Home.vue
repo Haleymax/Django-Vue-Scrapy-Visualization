@@ -21,10 +21,10 @@
             </el-header>
             <el-container>
                 <el-aside width="200px">
-                    <Menu></Menu>
+                    <Menu @navigate="handleClick"></Menu>
                 </el-aside>
                 <el-main>
-                    <div>
+                    <div class="main-content">
                         <RouterView></RouterView>
                     </div>
                 </el-main>
@@ -60,6 +60,8 @@ import {useLoginForm} from '@/store/home'
 import SignIn from '@/views/login/sign_in.vue'
 import SignUp from '@/views/login/sign_up.vue'
 import RetrievePassword from './login/RetrievePassword.vue'
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const showLoginForm = useLoginForm()
 
@@ -67,6 +69,12 @@ const handleCommand = (command: string | number | object) => {
     ElMessage(`click on item ${command}`)
 }
 
+const handleClick = (path: string) => {
+    console.log(path);
+    if(path) {
+        router.push(path)
+    }
+};
 
 </script>
 
@@ -152,5 +160,10 @@ const handleCommand = (command: string | number | object) => {
     justify-content: center;
     backdrop-filter: blur(5px); /* 背景模糊效果 */
     z-index: 1000; /* 确保在最上层 */
+}
+
+.main-content {
+    height: 950px;
+    padding: 20px;
 }
 </style>

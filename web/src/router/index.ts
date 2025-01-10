@@ -7,12 +7,18 @@ const  routes = [
     {
         path:'/',
         name:"home",
-        component:EchartsComponent
+        component:Home
     },
     {
         path:'/login',
         name:"login",
         component:Login
+
+    },
+    {
+        path:'/chart',
+        name:"chart",
+        component:EchartsComponent
 
     }
 
