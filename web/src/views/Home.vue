@@ -154,12 +154,12 @@ const handleClick = (path: string) => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(5px); /* 背景模糊效果 */
-    z-index: 1000; /* 确保在最上层 */
+    backdrop-filter: blur(5px);
+    z-index: 1000;
 }
 
 .main-content {

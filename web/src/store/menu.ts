@@ -8,9 +8,9 @@ export const menuDataStore = defineStore('menuDate', {
                     id: 1,
                     name: '个人中心',
                     children: [
-                        { id: 11, name: 'Menu 1-1', path: '/menu1-1' },
-                        { id: 12, name: 'Menu 1-2', path: '/menu1-2' },
-                        { id: 13, name: 'Menu 1-3', path: '/menu1-3' },
+                        { id: 11, name: '修改个人资料', path: '/ModifyPersonalData' },
+                        { id: 12, name: '修改密码', path: '/ChangePassword' },
+                        { id: 13, name: '注销账号', path: '/CancelAccount' },
                     ],
                 },
                 {
