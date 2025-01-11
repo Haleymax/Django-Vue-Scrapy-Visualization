@@ -27,6 +27,9 @@ def add_user(request):
 
 @csrf_exempt
 def login_user(request):
+    """
+    用于登录的接口
+    """
     result = {}
     if request.method == 'POST':
         email = request.POST['email']
@@ -34,7 +37,8 @@ def login_user(request):
 
         ret = authenticate(email, password, result)
         if ret:
-            request.session.set_test_cookie()
+            request.session['email'] = email
+            request.session.set_expiry(3600)
             return HttpResponse(json.dumps(result), status=201)
         else:
             return HttpResponse(json.dumps(result), status=201)
@@ -47,6 +51,9 @@ def login_user(request):
 
 @csrf_exempt
 def send_verification_code(request):
+    """
+    用于发送验证码的接口
+    """
     result = {}
     if request.method == "POST":
         try:
@@ -97,6 +104,9 @@ def send_verification_code(request):
 
 @csrf_exempt
 def register(request):
+    """
+    用于注册的接口
+    """
     result = {}
     if request.method == 'POST':
         try:
@@ -140,6 +150,9 @@ def register(request):
 
 @csrf_exempt
 def retrieve_password(request):
+    """
+    用于找回密码的接口
+    """
     result = {}
     if request.method == 'POST':
         try:
