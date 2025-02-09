@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import common
 from common.mail import get_mail
+from data.menu import menu_data
 from user import models
 from user.common.auth_utiles import authenticate, retrieve_password_by_email
 from user.models import User
@@ -196,3 +197,27 @@ def retrieve_password(request):
         result['message'] = "请求方式不正确"
         result['status'] = 5
         return HttpResponse(json.dumps(result), status = 405)
+
+
+def menu(request):
+    result = {}
+    if request.method == 'GET':
+        try:
+            email = request.session.get('email')
+            status = request.session.get('status')
+
+            if not email or not status:
+                result['status'] = 1
+                result['message'] = '用户登录状态不正常'
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+            else:
+                result['status'] = 0
+                result['message'] = '返回菜单数据'
+                result['data'] = menu_data
+                return HttpResponse(json.dumps(result), content_type="application/json", status=201)
+        except Exception as e:
+            result['status'] = 2
+            result['message'] = f"error:{e}"
+    else:
+        result['status'] = 3
+        result['message'] = "请求方式有误"
