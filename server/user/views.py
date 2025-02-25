@@ -1,10 +1,8 @@
 import json
 import logging
 
-from django.db.models.expressions import result
 from django.http import HttpResponse
 from django.core.cache import cache
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 import common
@@ -12,7 +10,6 @@ from common.mail import get_mail
 from data.menu import menu_data
 from user import models
 from user.common.auth_utiles import authenticate, retrieve_password_by_email
-from user.models import User
 
 email_client = get_mail()
 
@@ -198,7 +195,7 @@ def retrieve_password(request):
         result['status'] = 5
         return HttpResponse(json.dumps(result), status = 405)
 
-
+@csrf_exempt
 def menu(request):
     result = {}
     if request.method == 'GET':
